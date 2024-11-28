@@ -92,7 +92,7 @@ def split_json_file(input_file, output_train, output_test, output_val):
     save_data_to_file(val_records, output_val)
 
 def main():
-    split_json_file("E:\8085_project_2\COMP8085_Project2\yelp_academic_dataset_review.json", 'train.json', 'test.json', 'val.json')
+    split_json_file("D:\COMP8085\Data\yelp_academic_dataset_review.json", 'train.json', 'test.json', 'val.json')
 
 
 

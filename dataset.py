@@ -1,42 +1,47 @@
-import string
-import nltk
 import json
 import random
+import string
+
+import nltk
 from nltk.corpus import stopwords
-nltk.download('stopwords')
+
+nltk.download("stopwords")
+
 
 def process_record(record):
 
-    stop_words = set(stopwords.words('english'))
-    punctuation_table = str.maketrans('', '', string.punctuation)
+    stop_words = set(stopwords.words("english"))
+    punctuation_table = str.maketrans("", "", string.punctuation)
 
     # Ensure the record has all necessary fields with default values
     processed_record = {
-        'stars': record.get('stars', 0),
-        'useful': record.get('useful', 0),
-        'funny': record.get('funny', 0),
-        'cool': record.get('cool', 0),
-        'text': record.get('text', ''),
+        "stars": record.get("stars", 0),
+        "useful": record.get("useful", 0),
+        "funny": record.get("funny", 0),
+        "cool": record.get("cool", 0),
+        "text": record.get("text", ""),
     }
 
-    text = processed_record['text'].lower()
+    text = processed_record["text"].lower()
     # Remove punctuation
     text = text.translate(punctuation_table)
     # Remove stop words
     text = " ".join([word for word in text.split() if word not in stop_words])
-    processed_record['text'] = text
+    processed_record["text"] = text
 
     return processed_record
 
+
 def save_data_to_file(data, filename):
-    with open(filename, 'w', encoding='utf-8') as file:
+    with open(filename, "w", encoding="utf-8") as file:
         for record in data:
-            file.write(json.dumps(record) + '\n')
+            file.write(json.dumps(record) + "\n")
+
 
 def open_json_file(input_file):
     try:
         records = []
-        with open(input_file, 'r', encoding='utf-8') as infile:
+        with open(input_file, "r", encoding="utf-8") as infile:
             for line in infile:
                 records.append(json.loads(line))
         return records
@@ -60,11 +65,12 @@ def balance_data(data, target):
 
     return balanced_data
 
+
 def split_json_file(input_file, output_train, output_test, output_val):
 
     records = open_json_file(input_file)
 
-    balance_records = balance_data(records, 'stars')
+    balance_records = balance_data(records, "stars")
 
     processed_records = [process_record(record) for record in balance_records]
 
@@ -91,10 +97,11 @@ def split_json_file(input_file, output_train, output_test, output_val):
     print(f"Validation records: {len(val_records)}")
     save_data_to_file(val_records, output_val)
 
+
 def main():
-    split_json_file("E:\8085_project_2\COMP8085_Project2\yelp_academic_dataset_review.json", 'train.json', 'test.json', 'val.json')
+    input_file = input("Enter the path of the input file: ")
+    split_json_file(input_file, "train.json", "test.json", "val.json")
 
 
-
-if __name__ == '__main__':
-    main()  
+if __name__ == "__main__":
+    main()
